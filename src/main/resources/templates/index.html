@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+<script type="text/javascript">
+    var appId = '';
+    var timestamp = '';
+    var nonceStr = '';
+    var signature
+    function jssdk() {
+        $.ajax({
+            url : "http://a6fcfd3c.ngrok.io/wechat/jssdk",
+            async: false,
+            type : 'post',
+            dataType : 'json',
+            contentType : "application/x-www-form-urlencoded; charset=utf-8",
+            data : {
+                'url' : location.href.split('#')[0]
+            },
+            success : function(data) {
+                appId = data.data.appId;
+                timestamp = data.data.timestamp;
+                nonceStr = data.data.nonceStr;
+                signature = data.data.signature;
+            }
+        });
+    }
+
+    function isWeiXin5() {
+        var ua = window.navigator.userAgent.toLowerCase();
+        var reg = /MicroMessenger\/[5-9]/i;
+        return reg.test(ua);
+    }
+
+    //window.onload = function() {
+    //     if (isWeiXin5() == false) {
+    //           alert("您的微信版本低于 5.0，无法使用微信支付功能，请先升级！");
+    //         }
+    jssdk();
+
+    wx.config({
+        debug : true,
+        appId : appId,
+        timestamp : timestamp,
+        nonceStr : nonceStr,
+        signature : signature,
+        jsApiList : [ 'checkJsApi', 'onMenuShareAppMessage','onMenuShareTimeline']
+    });
+
+    wx.checkJsApi({
+        jsApiList: ['onMenuShareAppMessage','onMenuShareTimeline'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+        success: function(res) {
+            alert(res);
+            // 以键值对的形式返回，可用的api值true，不可用为false
+            // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+        }
+    });
+    wx.ready(function(){
+        wx.onMenuShareTimeline({
+            title: '互联网之子',
+            link: 'http://wx.vland.cc/mobile.php?act=module&rid=406&fromuser=oktsYuHivHXuzdsMeCbWyF7b14UU&name=hllihe&do=sharelihe&weid=7',
+            imgUrl: 'http://wx.vland.cc/resource/attachment/images/7/2015/01/fl2Lk2p5o3iOJP3jdp9iPXI9i93iPm.jpg',
+            trigger: function (res) {
+                alert('用户点击分享到朋友圈');
+            },
+            success: function (res) {
+                alert('已分享');
+            },
+            cancel: function (res) {
+                alert('已取消');
+            },
+            fail: function (res) {
+                alert('wx.onMenuShareTimeline:fail: '+JSON.stringify(res));
+            }
+        });
+        wx.onMenuShareAppMessage({
+            title: 'xxxx', // 分享标题
+            desc: 'xxxx', // 分享描述
+            link: 'http://a6fcfd3c.ngrok.io/hehe', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl: 'https://tpc.googlesyndication.com/daca_images/simgad/11791723879145827043', // 分享图标
+            success: function () {
+// 用户点击了分享后执行的回调函数
+                alert("分享成功");
+            }
+        });
+        wx.error(function(res){
+            console.log("错误信息 === ");
+            console.log(res);
+        });
+    });
+
+
+
+
+    // };
+</script>
+<body>
+<div class="btn-box share-box-wechat" >
+    <a class="text" onclick="shareWX();">分享到微信</a>
+</div>
+<div class="btn-box share-box-friend">
+    <a class="text">分享到朋友圈</a>
+</div>
+<div class="btn-box share-box-weibo">
+    <a class="text">分享到微博</a>
+</div>
+</div>
+<div class="btn-box share-box-qq">
+    <a class="text">分享到QQ</a>
+</div>
+<div class="btn-box share-box-qzone">
+    <a class="text">分享到QQ空间</a>
+</div>
+
+</body>
+<script type="text/javascript">
+    /*function shareTo(btn,callback) {
+        $('.share-box-'+btn).on('click',callback)
+    }
+    shareTo('wechat',function () {
+        /!**showQRcode('${product.pro_Coding}');*!/
+        wx.onMenuShareAppMessage(share_config.share);//分享给好友
+    });*/
+
+
+    /*window.share_config = {
+        "share": {
+            "imgUrl": "https://p3.pstatp.com/weili/l/256509190889275519.webp",
+            "desc" : "去你妈的",
+            "title" : '去你妈的',
+            "link":"www.baidu.com",
+            "success":function(){
+                //分享成功后的回调函数
+                alert("分享成功");
+            },
+            'cancel': function () {
+                // 用户取消分享后执行的回调函数
+                alert("分享失败");
+            }
+        }
+    };
+    function shareWX() {
+        alert(11);
+        wx.onMenuShareAppMessage(share_config.share);//分享给好友
+    }
+
+    wx.ready(function () {
+        wx.onMenuShareAppMessage(share_config.share);//分享给好友
+    });*/
+
+
+
+</script>
+</html>

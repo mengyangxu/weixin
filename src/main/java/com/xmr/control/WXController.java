@@ -23,4 +23,9 @@ public class WXController {
         return "weixin";
     }
 
+    @RequestMapping("index")
+    public String index(){
+        return "index";
+    }
+
 }
